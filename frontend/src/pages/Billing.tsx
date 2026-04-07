@@ -118,6 +118,25 @@ export default function Billing() {
     }
   }
 
+  const increaseQty = (id: number) => {
+    setItems(items.map(i =>
+      i.product_id === id
+        ? { ...i, qty: i.qty + 1, total: (i.qty + 1) * i.price }
+        : i
+    ))
+  }
+  
+  const decreaseQty = (id: number) => {
+    setItems(items
+      .map(i =>
+        i.product_id === id
+          ? { ...i, qty: i.qty - 1, total: (i.qty - 1) * i.price }
+          : i
+      )
+      .filter(i => i.qty > 0) 
+    )
+  }
+
   /* ================= TOTAL ================= */
 
   const total = items.reduce((s, i) => s + i.total, 0)
@@ -154,29 +173,57 @@ export default function Billing() {
       <h1 className="text-xl font-bold">Create Bill</h1>
 
       {/* CUSTOMER */}
-      <div className="bg-white p-4 rounded-xl border">
-        {selectedCustomer ? (
-          <div className="flex justify-between">
-            <span>{selectedCustomer.name}</span>
-            <button onClick={() => setSelectedCustomer(null)}>Change</button>
-          </div>
-        ) : (
-          <input
-            placeholder="Search customer"
-            value={custSearch}
-            onChange={e => searchCustomers(e.target.value)}
-            className="w-full border p-2 rounded"
-          />
-        )}
+      <div className="bg-white p-4 rounded-xl border relative">
 
-        {showCustDrop && customers.map(c => (
-          <div key={c.id}
-            onClick={() => selectCustomer(c)}
-            className="p-2 hover:bg-gray-100 cursor-pointer">
-            {c.name}
-          </div>
-        ))}
-      </div>
+  {selectedCustomer ? (
+    <div className="flex justify-between items-center">
+      <span className="font-medium">{selectedCustomer.name}</span>
+      <button
+        onClick={() => {
+          setSelectedCustomer(null)
+          setCustSearch('')
+        }}
+        className="text-xs text-blue-600 hover:underline"
+      >
+        Change
+      </button>
+    </div>
+  ) : (
+    <div className="relative">
+      <input
+        placeholder="Search customer..."
+        value={custSearch}
+        onChange={e => searchCustomers(e.target.value)}
+        onFocus={() => custSearch && setShowCustDrop(true)}
+        className="w-full border px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+      />
+
+      {/* 🔥 DROPDOWN */}
+      {showCustDrop && customers.length > 0 && (
+        <div className="absolute z-50 mt-1 w-full bg-white border rounded-lg shadow-lg max-h-52 overflow-y-auto">
+
+          {customers.map(c => (
+            <div
+              key={c.id}
+              onClick={() => selectCustomer(c)}
+              className="px-3 py-2 text-sm hover:bg-blue-50 cursor-pointer"
+            >
+              {c.name}
+            </div>
+          ))}
+
+        </div>
+      )}
+
+      {/* NO DATA */}
+      {showCustDrop && customers.length === 0 && custSearch && (
+        <div className="absolute z-50 mt-1 w-full bg-white border rounded-lg shadow text-sm p-2 text-gray-400">
+          No customers found
+        </div>
+      )}
+    </div>
+  )}
+</div>
 
       {/* PRODUCTS */}
       <div className="bg-white p-4 rounded-xl border">
@@ -196,9 +243,39 @@ export default function Billing() {
         ))}
 
         {items.map((item, idx) => (
-          <div key={idx} className="flex justify-between mt-2">
-            <span>{item.name} x {item.qty}</span>
-            <span>₹{item.total}</span>
+          <div key={idx} className="flex justify-between items-center mt-2 border-b pb-2">
+
+            {/* NAME */}
+            <div>
+              <p className="font-medium">{item.name}</p>
+
+              {/* CONTROLS */}
+              <div className="flex items-center gap-2 mt-1">
+
+                <button
+                  onClick={() => decreaseQty(item.product_id)}
+                  className="px-2 bg-red-100 text-red-600 rounded"
+                >
+                  -
+                </button>
+
+                <span>{item.qty}</span>
+
+                <button
+                  onClick={() => increaseQty(item.product_id)}
+                  className="px-2 bg-green-100 text-green-600 rounded"
+                >
+                  +
+                </button>
+
+              </div>
+            </div>
+
+            {/* TOTAL */}
+            <span className="font-semibold">
+              ₹{item.total}
+            </span>
+
           </div>
         ))}
       </div>

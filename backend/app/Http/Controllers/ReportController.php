@@ -77,27 +77,27 @@ class ReportController extends Controller
         return response()->json(['status' => 'success', 'data' => $products]);
     }
 
-    public function exportPdf(Request $request)
-    {
-        $from = $request->from_date ?? now()->toDateString();
-        $to   = $request->to_date   ?? now()->toDateString();
+    // public function exportPdf(Request $request)
+    // {
+    //     $from = $request->from_date ?? now()->toDateString();
+    //     $to   = $request->to_date   ?? now()->toDateString();
 
-        $invoices = Invoice::with('customer')
-            ->whereDate('created_at', '>=', $from)
-            ->whereDate('created_at', '<=', $to)
-            ->orderBy('created_at', 'desc')
-            ->get();
+    //     $invoices = Invoice::with('customer')
+    //         ->whereDate('created_at', '>=', $from)
+    //         ->whereDate('created_at', '<=', $to)
+    //         ->orderBy('created_at', 'desc')
+    //         ->get();
 
-        $settings = Setting::pluck('value', 'key');
-        $summary  = [
-            'total_bills'   => $invoices->count(),
-            'total_revenue' => round($invoices->sum('total'), 2),
-            'cash'          => round($invoices->where('payment_mode', 'cash')->sum('total'), 2),
-            'upi'           => round($invoices->where('payment_mode', 'upi')->sum('total'), 2),
-            'card'          => round($invoices->where('payment_mode', 'card')->sum('total'), 2),
-        ];
+    //     $settings = Setting::pluck('value', 'key');
+    //     $summary  = [
+    //         'total_bills'   => $invoices->count(),
+    //         'total_revenue' => round($invoices->sum('total'), 2),
+    //         'cash'          => round($invoices->where('payment_mode', 'cash')->sum('total'), 2),
+    //         'upi'           => round($invoices->where('payment_mode', 'upi')->sum('total'), 2),
+    //         'card'          => round($invoices->where('payment_mode', 'card')->sum('total'), 2),
+    //     ];
 
-        $pdf = Pdf::loadView('reports.daily', compact('invoices', 'settings', 'summary', 'from', 'to'));
-        return $pdf->download("report-{$from}-to-{$to}.pdf");
-    }
+    //     $pdf = Pdf::loadView('reports.daily', compact('invoices', 'settings', 'summary', 'from', 'to'));
+    //     return $pdf->download("report-{$from}-to-{$to}.pdf");
+    // }
 }

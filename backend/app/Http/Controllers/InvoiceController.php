@@ -38,42 +38,26 @@ class InvoiceController extends Controller
             'payment_mode'       => 'required|in:cash,upi,card',
         ]);
 
-        $invoice = DB::transaction(function () use ($request, &$invoice) {
-            // Generate bill number
-            $last    = Invoice::orderBy('id', 'desc')->first();
-            $num     = $last ? (intval(substr($last->bill_no, 4)) + 1) : 1;
-            $bill_no = 'OPT-' . str_pad($num, 4, '0', STR_PAD_LEFT);
+        $invoice = DB::transaction(function () use ($request) {
 
-            // Calculate totals
+            // Generate bill number
+            $last = Invoice::orderBy('id', 'desc')->first();
+            $num  = $last ? (intval(substr($last->bill_no, 4)) + 1) : 1;
+            $bill_no = 'OPT-' . str_pad($num, 4, '0', STR_PAD_LEFT);
+        
             $subtotal = 0;
             foreach ($request->items as $item) {
                 $subtotal += $item['price'] * $item['qty'];
             }
-
-            $discount    = $request->discount ?? 0;
-            $discountAmt = $request->discount_type === 'percent'
-                ? ($subtotal * $discount / 100)
-                : $discount;
-            $afterDiscount = $subtotal - $discountAmt;
-            $gstRate       = $request->gst_rate ?? 0;
-            $gstAmt        = $afterDiscount * $gstRate / 100;
-            $total         = $afterDiscount + $gstAmt;
-
-            // Create invoice
+        
             $invoice = Invoice::create([
-                'customer_id'   => $request->customer_id,
-                'bill_no'       => $bill_no,
-                'subtotal'      => $subtotal,
-                'discount'      => $discountAmt,
-                'discount_type' => $request->discount_type ?? 'flat',
-                'gst_rate'      => $gstRate,
-                'gst_amount'    => $gstAmt,
-                'total'         => $total,
-                'payment_mode'  => $request->payment_mode,
-                'notes'         => $request->notes,
+                'customer_id' => $request->customer_id,
+                'bill_no'     => $bill_no,
+                'subtotal'    => $subtotal,
+                'total'       => $subtotal,
+                'payment_mode'=> $request->payment_mode,
             ]);
-
-            // Create items + reduce stock
+        
             foreach ($request->items as $item) {
                 InvoiceItem::create([
                     'invoice_id' => $invoice->id,
@@ -83,30 +67,13 @@ class InvoiceController extends Controller
                     'price'      => $item['price'],
                     'total'      => $item['price'] * $item['qty'],
                 ]);
-
-                // Reduce product stock
+        
                 Product::where('id', $item['product_id'])
                     ->decrement('stock', $item['qty']);
             }
-
-            // Save prescription if provided
-            if ($request->prescription) {
-                $p = $request->prescription;
-                Prescription::create([
-                    'customer_id' => $request->customer_id,
-                    'invoice_id'  => $invoice->id,
-                    're_sph'      => $p['re_sph'] ?? null,
-                    're_cyl'      => $p['re_cyl'] ?? null,
-                    're_axis'     => $p['re_axis'] ?? null,
-                    're_add'      => $p['re_add'] ?? null,
-                    'le_sph'      => $p['le_sph'] ?? null,
-                    'le_cyl'      => $p['le_cyl'] ?? null,
-                    'le_axis'     => $p['le_axis'] ?? null,
-                    'le_add'      => $p['le_add'] ?? null,
-                    'visit_date'  => now()->toDateString(),
-                    'notes'       => $p['notes'] ?? null,
-                ]);
-            }
+        
+            // 🔥 IMPORTANT RETURN
+            return $invoice;
         });
 
         $invoice->load('customer', 'items.product');

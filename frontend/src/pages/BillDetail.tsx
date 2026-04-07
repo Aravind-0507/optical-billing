@@ -9,8 +9,15 @@ export default function BillDetail() {
   const [settings, setSettings] = useState({})
 
   useEffect(() => {
-    api.get(`/invoices/${id}`).then(r => setBill(r.data.data))
-    api.get('/settings').then(r => setSettings(r.data.data))
+    api.get(`/invoices/${id}`).then(r => {
+      const data = r.data.data
+      setBill(data)
+      const customerName = data.customer?.name || 'bill'
+      const billNo = data.bill_no || 'invoice'
+  
+      document.title = `${customerName}_${billNo}`
+    })
+  
   }, [id])
 
   const handlePrint = () => window.print()

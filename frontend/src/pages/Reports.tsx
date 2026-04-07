@@ -65,12 +65,12 @@ export default function Reports() {
 
   /* ================= DOWNLOAD ================= */
 
-  const downloadPdf = () => {
-    const token = localStorage.getItem('optical_token')
-    const url = `http://localhost/optical-api/public/api/reports/pdf?from_date=${from}&to_date=${to}`
+  // const downloadPdf = () => {
+  //   const token = localStorage.getItem('optical_token')
+  //   const url = `http://localhost/optical-api/public/api/reports/pdf?from_date=${from}&to_date=${to}`
 
-    window.open(url + `&token=${token}`, '_blank')
-  }
+  //   window.open(url + `&token=${token}`, '_blank')
+  // }
 
   /* ================= UI ================= */
 
@@ -81,12 +81,13 @@ export default function Reports() {
       <div className="flex items-center justify-between mb-5">
         <h1 className="text-xl font-bold text-gray-900">Reports</h1>
 
-        <button
+        {/* <button
           onClick={downloadPdf}
           className="bg-red-600 text-white px-4 py-2 rounded-lg"
         >
           Download PDF
-        </button>
+        </button> */}
+        
       </div>
 
       {/* FILTER */}
@@ -139,12 +140,12 @@ export default function Reports() {
               <h2>₹{report.summary?.cash || 0}</h2>
             </div>
 
-            <div className="bg-white p-4 rounded">
+            {/* <div className="bg-white p-4 rounded">
               <p>UPI + Card</p>
               <h2>
                 ₹{(report.summary?.upi || 0) + (report.summary?.card || 0)}
               </h2>
-            </div>
+            </div> */}
 
           </div>
 
@@ -152,33 +153,64 @@ export default function Reports() {
           {report.invoices.length === 0 ? (
             <p>No data</p>
           ) : (
-            <table className="w-full bg-white rounded">
+            // <table className="w-full bg-white rounded">
 
-              <thead>
-                <tr>
-                  <th>Bill No</th>
-                  <th>Customer</th>
-                  <th>Date</th>
-                  <th>Total</th>
-                  <th>Mode</th>
-                </tr>
-              </thead>
+            //   <thead>
+            //     <tr>
+            //       <th>Bill No</th>
+            //       <th>Customer</th>
+            //       <th>Date</th>
+            //       <th>Total</th>
+            //       {/* <th>Mode</th> */}
+            //     </tr>
+            //   </thead>
 
-              <tbody>
-                {report.invoices.map((b) => (
-                  <tr key={b.id}>
-                    <td>{b.bill_no}</td>
-                    <td>{b.customer?.name}</td>
-                    <td>
-                      {new Date(b.created_at).toLocaleDateString()}
-                    </td>
-                    <td>₹{b.total}</td>
-                    <td>{b.payment_mode}</td>
-                  </tr>
-                ))}
-              </tbody>
+            //   <tbody>
+            //     {report.invoices.map((b) => (
+            //       <tr key={b.id}>
+            //         <td>{b.bill_no}</td>
+            //         <td>{b.customer?.name}</td>
+            //         <td>
+            //           {new Date(b.created_at).toLocaleDateString()}
+            //         </td>
+            //         <td>₹{b.total}</td>
+            //         {/* <td>{b.payment_mode}</td> */}
+            //       </tr>
+            //     ))}
+            //   </tbody>
 
-            </table>
+            // </table>
+                <div className="bg-white rounded-lg shadow overflow-hidden">
+                  <table className="w-full text-sm text-left">
+
+                    {/* HEADER */}
+                    <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
+                      <tr>
+                        <th className="px-4 py-3">Bill No</th>
+                        <th className="px-4 py-3">Customer</th>
+                        <th className="px-4 py-3">Date</th>
+                        <th className="px-4 py-3 text-right">Total</th>
+                      </tr>
+                    </thead>
+
+                    {/* BODY */}
+                    <tbody className="divide-y">
+                      {report.invoices.map((b) => (
+                        <tr key={b.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 font-medium">{b.bill_no}</td>
+                          <td className="px-4 py-3">{b.customer?.name || '-'}</td>
+                          <td className="px-4 py-3">
+                            {new Date(b.created_at).toLocaleDateString()}
+                          </td>
+                          <td className="px-4 py-3 text-right font-semibold">
+                          ₹{Number(b.total || 0).toFixed(2)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+
+                  </table>
+                </div>
           )}
 
         </>

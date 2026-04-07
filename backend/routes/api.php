@@ -48,5 +48,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reports/daily',        [ReportController::class, 'daily']);
     Route::get('/reports/monthly',      [ReportController::class, 'monthly']);
     Route::get('/reports/top-products', [ReportController::class, 'topProducts']);
-    Route::get('/reports/pdf',          [ReportController::class, 'exportPdf']);
+    // Route::get('/reports/pdf',          [ReportController::class, 'exportPdf']);
 });

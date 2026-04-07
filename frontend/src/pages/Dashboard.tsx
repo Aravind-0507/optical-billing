@@ -79,7 +79,7 @@ export default function Dashboard() {
 
         {/* Quick actions + stock alert */}
         <div className="space-y-4">
-          <div className="bg-white rounded-xl border border-gray-100 p-4">
+          {/* <div className="bg-white rounded-xl border border-gray-100 p-4">
             <h2 className="text-sm font-semibold text-gray-800 mb-3">Quick Actions</h2>
             <div className="space-y-2">
               {[
@@ -94,7 +94,7 @@ export default function Dashboard() {
                 </button>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {(data?.low_stock > 0 || data?.out_of_stock > 0) && (
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
