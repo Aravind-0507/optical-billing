@@ -268,7 +268,7 @@ export default function Billing() {
                   +
                 </button>
 
-              </div>
+              </div>    
             </div>
 
             {/* TOTAL */}
