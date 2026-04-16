@@ -228,13 +228,18 @@ export default function Customers() {
             required
           />
 
-          <input
-            value={form.phone}
-            onChange={e => setForm({ ...form, phone: e.target.value })}
-            placeholder="Phone"
-            className="w-full border border-gray-200 p-2 rounded-lg mt-2 text-sm"
-            required
-          />
+        <input
+          value={form.phone}
+          onChange={(e) => {
+            const value = e.target.value.replace(/\D/g, '') 
+            if (value.length <= 10) {
+              setForm({ ...form, phone: value })
+            }
+          }}
+          placeholder="Phone"
+          className="w-full border border-gray-200 p-2 rounded-lg mt-2 text-sm"
+          required
+        />
 
           <input
             value={form.email}

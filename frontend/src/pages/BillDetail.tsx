@@ -26,7 +26,7 @@ export default function BillDetail() {
     if (!bill?.customer?.phone) return alert('No phone number for this customer')
     const phone = bill.customer.phone.replace(/\D/g, '')
     const fullPhone = phone.startsWith('91') ? phone : `91${phone}`
-    const msg = `Dear ${bill.customer.name},\n\nYour bill from ${settings.shop_name || 'Vision Optical'} is ready!\n\nBill No : ${bill.bill_no}\nDate    : ${new Date(bill.created_at).toLocaleDateString('en-IN')}\nAmount  : ₹${Number(bill.total).toLocaleString()}\nPayment : ${bill.payment_mode.toUpperCase()}\n\nThank you for visiting us!\n📍 ${settings.shop_name || 'Vision Optical'}, ${settings.city || ''}`
+    const msg = `Dear ${bill.customer.name},\n\nYour bill from ${settings.shop_name || 'Kala Opticals'} is ready!\n\nBill No : ${bill.bill_no}\nDate    : ${new Date(bill.created_at).toLocaleDateString('en-IN')}\nAmount  : ₹${Number(bill.total).toLocaleString()}\nPayment : ${bill.payment_mode.toUpperCase()}\n\nThank you for visiting us!\n📍 ${settings.shop_name || 'Kala Opticals'}, ${settings.city || ''}`
     window.open(`https://wa.me/${fullPhone}?text=${encodeURIComponent(msg)}`, '_blank')
   }
 
@@ -60,7 +60,7 @@ export default function BillDetail() {
         {/* Bill preview card */}
         <div className="bg-white rounded-xl border border-gray-100 p-5 max-w-md">
           <div className="text-center mb-4 border-b border-dashed border-gray-200 pb-4">
-            <h2 className="font-bold text-lg text-gray-900">{settings.shop_name || 'Vision Optical'}</h2>
+            <h2 className="font-bold text-lg text-gray-900">{settings.shop_name || 'Kala Opticals'}</h2>
             <p className="text-xs text-gray-500">{settings.address}, {settings.city}</p>
             {settings.phone && <p className="text-xs text-gray-500">Ph: {settings.phone}</p>}
             {settings.gst_no && <p className="text-xs text-gray-500">GSTIN: {settings.gst_no}</p>}
@@ -130,7 +130,7 @@ export default function BillDetail() {
       {/* Print view — 80mm thermal style */}
       <div className="print-only" style={{ fontFamily: 'monospace', fontSize: '11px', width: '72mm', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 8 }}>
-          <strong style={{ fontSize: 13 }}>{settings.shop_name || 'VISION OPTICAL'}</strong><br/>
+          <strong style={{ fontSize: 13 }}>{settings.shop_name || 'Kala Opticals'}</strong><br/>
           {settings.address}<br/>
           {settings.city}<br/>
           {settings.phone && <>Ph: {settings.phone}<br/></>}

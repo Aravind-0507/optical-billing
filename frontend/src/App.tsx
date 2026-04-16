@@ -14,7 +14,7 @@ import Billing from './pages/Billing'
 import Bills from './pages/Bills'
 import BillDetail from './pages/BillDetail'
 import Reports from './pages/Reports'
-import Settings from './pages/Settings'
+// import Settings from './pages/Settings'
 import ChangePassword from './pages/ChangePassword'
 
 interface AppLayoutProps {

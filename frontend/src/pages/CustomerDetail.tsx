@@ -159,8 +159,42 @@ export default function CustomerDetail() {
             <div>No prescriptions yet</div>
           ) : (
             customer.prescriptions.map((p: Prescription) => (
-              <div key={p.id}>
-                {new Date(p.visit_date).toLocaleDateString('en-IN')}
+              <div key={p.id} className="bg-white p-4 rounded-lg border shadow-sm">
+            
+                {/* DATE */}
+                <p className="text-xs text-gray-400 mb-2">
+                  {new Date(p.visit_date).toLocaleDateString('en-IN')}
+                </p>
+            
+                <div className="grid grid-cols-2 gap-4 text-sm">
+            
+                  {/* RIGHT EYE */}
+                  <div>
+                    <p className="font-semibold text-gray-800 mb-1">Right Eye</p>
+                    <p>SPH: {p.re_sph ?? '-'}</p>
+                    <p>CYL: {p.re_cyl ?? '-'}</p>
+                    <p>AXIS: {p.re_axis ?? '-'}</p>
+                    <p>ADD: {p.re_add ?? '-'}</p>
+                  </div>
+            
+                  {/* LEFT EYE */}
+                  <div>
+                    <p className="font-semibold text-gray-800 mb-1">Left Eye</p>
+                    <p>SPH: {p.le_sph ?? '-'}</p>
+                    <p>CYL: {p.le_cyl ?? '-'}</p>
+                    <p>AXIS: {p.le_axis ?? '-'}</p>
+                    <p>ADD: {p.le_add ?? '-'}</p>
+                  </div>
+            
+                </div>
+            
+                {/* NOTES */}
+                {p.notes && (
+                  <p className="text-xs text-gray-500 mt-2">
+                    Notes: {p.notes}
+                  </p>
+                )}
+            
               </div>
             ))
           )}

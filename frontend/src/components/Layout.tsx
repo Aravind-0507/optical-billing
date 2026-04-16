@@ -45,7 +45,7 @@ export default function Layout({ children }: LayoutProps) {
               👁️
             </div>
             <span className="font-semibold text-gray-800">
-              Vision Optical
+              Kala Opticals
             </span>
           </div>
 
@@ -115,7 +115,7 @@ export default function Layout({ children }: LayoutProps) {
 
       {/* 🔷 FOOTER */}
       <footer className="bg-white border-t text-center text-xs text-gray-400 py-3">
-        © {new Date().getFullYear()} Vision Optical
+        © {new Date().getFullYear()} Kala Opticals
       </footer>
 
     </div>

@@ -24,7 +24,7 @@
 </head>
 <body>
 <div class="header">
-  <h1>{{ $settings['shop_name'] ?? 'Vision Optical' }}</h1>
+  <h1>{{ $settings['shop_name'] ?? 'Kala Opticals' }}</h1>
   <p>{{ $settings['address'] ?? '' }}, {{ $settings['city'] ?? '' }} | Ph: {{ $settings['phone'] ?? '' }}</p>
   @if(!empty($settings['gst_no']))<p>GSTIN: {{ $settings['gst_no'] }}</p>@endif
   <p style="margin-top:8px;font-size:13px;font-weight:bold;color:#0f2340">
@@ -69,7 +69,7 @@
 </table>
 
 <p style="margin-top:20px;font-size:10px;color:#94a3b8;text-align:center">
-  Generated on {{ now()->format('d M Y, h:i A') }} • {{ $settings['shop_name'] ?? 'Vision Optical' }}
+  Generated on {{ now()->format('d M Y, h:i A') }} • {{ $settings['shop_name'] ?? 'Kala Opticals' }}
 </p>
 </body>
 </html>

@@ -156,7 +156,15 @@ export default function Billing() {
         payment_mode: paymentMode,
         prescription: showRx ? prescription : null
       })
+      const invoiceId = res.data.data.id
 
+      if (showRx) {
+        await api.post('/prescriptions', {
+          customer_id: selectedCustomer.id,
+          invoice_id: invoiceId,
+          ...prescription
+        })
+      }
       navigate(`/bills/${res.data.data.id}`)
     } catch {
       alert('Error saving bill')
@@ -305,6 +313,13 @@ export default function Billing() {
                 onChange={e => setPrescription(p => ({ ...p, re_cyl: e.target.value }))} />
               <input placeholder="AXIS"
                 onChange={e => setPrescription(p => ({ ...p, re_axis: e.target.value }))} />
+                <input placeholder="ADD"
+                  onChange={e => setPrescription(p => ({
+                    ...p,
+                    re_add: e.target.value,
+                    le_add: e.target.value  
+                  }))}
+                />
             </div>
 
             {/* LEFT */}
@@ -316,6 +331,7 @@ export default function Billing() {
                 onChange={e => setPrescription(p => ({ ...p, le_cyl: e.target.value }))} />
               <input placeholder="AXIS"
                 onChange={e => setPrescription(p => ({ ...p, le_axis: e.target.value }))} />
+                <p className="text-sm mt-2">ADD: {prescription.le_add || '-'}</p>
             </div>
 
           </div>
