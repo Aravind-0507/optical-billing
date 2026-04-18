@@ -1,6 +1,7 @@
 import { useState, FormEvent, useEffect } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { Eye, EyeOff } from 'lucide-react'
 
 // Inject Google Font
 const fontLink = document.createElement('link')
@@ -16,7 +17,8 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
+  const [showPassword, setShowPassword] = useState(false)
+  
   useEffect(() => {}, [])
 
   if (user) return <Navigate to="/" replace />
@@ -179,29 +181,41 @@ transition: '0.2s',
           />
 
           {/* PASSWORD */}
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{
-              width: '100%',
-              padding: 14,
-              marginBottom: 20,
-              background: 'rgba(255,255,255,0.6)',
-border: '1px solid rgba(0,0,0,0.08)',
-transition: '0.2s',
-              borderRadius: 8,
-              outline: 'none'
-            }}
-            onFocus={(e) =>
-              (e.target.style.border = '1px solid #2563eb')
-            }
-            onBlur={(e) =>
-              (e.target.style.border = '1px solid #e2e8f0')
-            }
-          />
+          <div style={{ position: 'relative', marginBottom: 20 }}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '14px 45px 14px 14px',
+                background: 'rgba(255,255,255,0.6)',
+                border: '1px solid rgba(0,0,0,0.08)',
+                borderRadius: 8,
+                outline: 'none'
+              }}
+              onFocus={(e) =>
+                (e.target.style.border = '1px solid #2563eb')
+              }
+              onBlur={(e) =>
+                (e.target.style.border = '1px solid #e2e8f0')
+              }
+            />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: 12,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+                color: '#64748b'
+              }}>
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </span>
+          </div>
 
           {/* BUTTON */}
           <button
@@ -211,7 +225,7 @@ transition: '0.2s',
               width: '100%',
               padding: 14,
               background: 'linear-gradient(135deg,#22c55e,#16a34a)',
-boxShadow: '0 10px 25px rgba(34,197,94,0.4)',
+              boxShadow: '0 10px 25px rgba(34,197,94,0.4)',
               color: '#fff',
               border: 'none',
               borderRadius: 8,
